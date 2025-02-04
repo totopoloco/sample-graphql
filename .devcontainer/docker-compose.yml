@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  dev-env:
+    container_name: dev-env
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    cap_add:
+      - CAP_IPC_LOCK
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment:
+      - MONGODB_URI=mongodb://root:example@mongodb:27017/your-database-name?authSource=admin
+    depends_on:
+      - mongodb
+  mongodb:
+    image: bitnami/mongodb:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=example
+    volumes:
+      - mongodb_data:/bitnami/mongodb
+
+volumes:
+  mongodb_data:
+    driver: local
