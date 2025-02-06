@@ -1,13 +1,14 @@
 {
     "name": "sample-graphql",
+    "version": "0.0.1",
     "description": "A sample application for Graphql and MongoDB",
     "private": false,
-    "scripts":
-    {
-        "clean": "pnpm store prune"
+    "main": "index.js",
+    "scripts": {
+        "clean": "pnpm store prune",
+        "start": "nodemon ."
     },
-    "dependencies":
-    {
+    "dependencies": {
         "@apollo/server": "^4.11.3",
         "body-parser": "^1.20.3",
         "cors": "^2.8.5",
@@ -27,12 +28,10 @@
         "react-selecto": "^1.26.3",
         "react-use-wizard": "^2.3.0"
     },
-    "devDependencies":
-    {
+    "devDependencies": {
         "nodemon": "^3.1.9"
     },
-    "engines":
-    {
+    "engines": {
         "npm": "please-use-pnpm",
         "yarn": "please-use-pnpm"
     }

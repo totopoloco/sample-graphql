@@ -9,11 +9,12 @@ services:
     cap_add:
       - CAP_IPC_LOCK
     command: /bin/sh -c "while sleep 1000; do :; done"
-    environment:
-      - MONGODB_URI=mongodb://root:example@mongodb:27017/your-database-name?authSource=admin
     depends_on:
       - mongodb
+    ports:
+      - '4000:4000'
   mongodb:
+    container_name: mongodb
     image: bitnami/mongodb:latest
     ports:
       - '27017:27017'
