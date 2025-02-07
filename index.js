@@ -4,16 +4,15 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const { mongoose } = require('mongoose');
-const { typeDefs } = require('./graphql/typeDefs');
-const { resolvers } = require('./graphql/resolvers');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { schema } = require('./graphql/mergertd');
 
 const startServer = async () => {
   const contextPath = process.env.CONTEXT_PATH || '/graphql';
 
   const app = express();
-  const server = new ApolloServer({ typeDefs, resolvers });
+  const server = new ApolloServer({ schema });
 
   await server.start();
 

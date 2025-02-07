@@ -1,7 +1,4 @@
-const { gql } = require('graphql-tag');
-
-const typeDefs = gql`
-
+const typeDefs = `
 type User {
   id: ID!
   name: String!
@@ -18,7 +15,6 @@ type Mutation {
   updateUser(id: ID!, name: String, email: String): User
   deleteUser(id: ID!): User
 }
-
 `;
 
-module.exports = { typeDefs };
+module.exports = typeDefs;
