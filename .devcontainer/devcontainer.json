@@ -21,7 +21,13 @@
         "DavidAnson.vscode-markdownlint",
         "ms-azuretools.vscode-docker",
         "k--kato.intellij-idea-keybindings",
-        "christian-kohler.npm-intellisense"
+        "christian-kohler.npm-intellisense",
+        "graphql.vscode-graphql",
+        "graphql.vscode-graphql-syntax",
+        "graphql.vscode-graphql-execution",
+        "apollographql.vscode-apollo",
+        "apollographql.apollo-workbench",
+        "apollographql.apollo-midnight-color-theme"
       ]
     }
   },
