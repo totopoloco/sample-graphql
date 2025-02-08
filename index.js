@@ -54,6 +54,7 @@ const startServer = async () => {
 
   const server = new ApolloServer({
     schema,
+    introspection: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
@@ -76,7 +77,17 @@ const startServer = async () => {
     bodyParser.json(),
     expressMiddleware(server, {
       context: async () => ({ pubsub }),
-    })
+    }),
+    (req, res, next) => {
+
+      req.log.info({ req }, 'Request received');
+
+      res.on('finish', () => {
+        req.log.info({ res }, 'Response sent');
+      });
+
+      next();
+    }
   );
 
   const PORT = process.env.PORT || 4000;
@@ -86,7 +97,7 @@ const startServer = async () => {
     family: 4
   });
   console.log('[📚] MongoDB connected');
-  
+
   httpServer.listen(PORT, () => {
     console.log(`[🚀] Server ready at http://localhost:${PORT}${contextPath}`);
     console.log(`[🔌] WebSocket server ready at ws://localhost:${PORT}${contextPath}`);
