@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch via PNPM",
+      "request": "launch",
+      "runtimeArgs": [
+        "run",
+        "start"
+      ],
+      "runtimeExecutable": "pnpm",
+      "type": "node",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "internalConsoleOptions": "neverOpen"
+    },
+  ]
+}
