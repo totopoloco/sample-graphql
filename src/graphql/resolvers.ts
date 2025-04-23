@@ -20,10 +20,10 @@ interface UpdateUserArgs extends Partial<CreateUserArgs> {
 const resolvers: IResolvers = {
   Query: {
     users: async (): Promise<IUser[]> => await User.find(),
-    user: async (_, { id }: UserArgs): Promise<IUser | null> => await User.findById(id),
+    user: async (_: any, { id }: UserArgs): Promise<IUser | null> => await User.findById(id),
   },
   Mutation: {
-    createUser: async (_, { name, email, gender }: CreateUserArgs): Promise<IUser> => {
+    createUser: async (_: any, { name, email, gender }: CreateUserArgs): Promise<IUser> => {
       const user = new User({ name, email, gender });
       await user.save();
 
@@ -39,7 +39,7 @@ const resolvers: IResolvers = {
       return user;
     },
 
-    updateUser: async (_, { id, name, email, gender }: UpdateUserArgs): Promise<IUser | null> => {
+    updateUser: async (_: any, { id, name, email, gender }: UpdateUserArgs): Promise<IUser | null> => {
       const user = await User.findByIdAndUpdate(
         id,
         { name, email, gender },
@@ -58,7 +58,7 @@ const resolvers: IResolvers = {
 
       return user;
     },
-    deleteUser: async (_, { id }: UserArgs): Promise<IUser | null> => {
+    deleteUser: async (_: any, { id }: UserArgs): Promise<IUser | null> => {
       const user = await User.findByIdAndDelete(id);
 
       if (user) {
