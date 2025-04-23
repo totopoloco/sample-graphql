@@ -1,4 +1,5 @@
-node_modules
 approve-builds.exp
 /.pnpm-store/
 pnpm-lock.yaml
+dist/
+node_modules/
