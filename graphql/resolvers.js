@@ -9,8 +9,8 @@ const resolvers = {
     user: async (_, { id }) => await User.findById(id),
   },
   Mutation: {
-    createUser: async (_, { name, email }) => {
-      const user = new User({ name, email });
+    createUser: async (_, { name, email, gender }) => {
+      const user = new User({ name, email, gender });
       await user.save();
 
       //Publish the event
@@ -24,8 +24,14 @@ const resolvers = {
       //Return the user
       return user;
     },
-    updateUser: async (_, { id, name, email }) => {
-      const user = await User.findByIdAndUpdate(id, { name, email }, { new: true });
+
+    updateUser: async (_, { id, name, email, gender }) => {
+
+      const user = await User.findByIdAndUpdate(
+        id,
+        { name, email, gender },
+        { new: true }
+      );
 
       //Publish the event
       await pubsub.publish(EVENTS.USER_CHANGED, {

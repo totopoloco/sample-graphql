@@ -3,7 +3,7 @@
   "dockerComposeFile": [
     "docker-compose.yml"
   ],
-  "service": "dev-env",
+  "service": "demo-graphql-dev-env",
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   "postCreateCommand": "/usr/local/bin/entrypoint.sh",

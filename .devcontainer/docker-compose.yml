@@ -1,6 +1,6 @@
 services:
-  dev-env:
-    container_name: dev-env
+  demo-graphql-dev-env:
+    container_name: demo-graphql-dev-env
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -10,11 +10,11 @@ services:
       - CAP_IPC_LOCK
     command: /bin/sh -c "while sleep 1000; do :; done"
     depends_on:
-      - mongodb
+      - demo-graphql-mongodb
     ports:
       - '4000:4000'
-  mongodb:
-    container_name: mongodb
+  demo-graphql-mongodb:
+    container_name: demo-graphql-mongodb
     image: bitnami/mongodb:latest
     ports:
       - '27017:27017'
@@ -22,8 +22,8 @@ services:
       - MONGODB_ROOT_USER=root
       - MONGODB_ROOT_PASSWORD=example
     volumes:
-      - mongodb_data:/bitnami/mongodb
+      - demo-graphql-mongodb-data:/bitnami/mongodb
 
 volumes:
-  mongodb_data:
+  demo-graphql-mongodb-data:
     driver: local

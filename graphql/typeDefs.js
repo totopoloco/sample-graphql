@@ -11,6 +11,12 @@ enum UserMutationType {
   DELETED
 }
 
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+}
+
 """
 User Subscription Payload.
 The server will send a message to the client
@@ -31,6 +37,8 @@ type User {
   name: String!
   "The user's email."
   email: String!
+  "The user's gender."
+  gender: String!
 }
 
 """
@@ -50,9 +58,9 @@ All mutations that can be made to the server.
 """
 type Mutation {
   "Create a new user."
-  createUser(name: String!, email: String!): User
+  createUser(name: String!, email: String!, gender: Gender!): User
   "Update an existing user."
-  updateUser(id: ID!, name: String, email: String): User
+  updateUser(id: ID!, name: String, email: String, gender: Gender): User
   "Delete an existing user."
   deleteUser(id: ID!): User
 }
