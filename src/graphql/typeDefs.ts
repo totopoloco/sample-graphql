@@ -13,7 +13,7 @@ export const typeDefs = `#graphql
   enum Gender {
     FEMALE
     MALE
-    NOT_SPECIFIED
+    OTHER
   }
 
   """

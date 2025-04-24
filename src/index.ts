@@ -12,7 +12,6 @@ import mongoose from 'mongoose';
 import { schema } from './graphql/mergedSchema';
 import { pubsub } from './graphql/pubsub';
 import { Context } from './types/context';
-import { PubSub } from 'graphql-subscriptions';
 
 // Create Express app and HTTP server
 const app = express();

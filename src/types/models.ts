@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 export enum Gender {
   FEMALE = 'FEMALE',
   MALE = 'MALE',
-  NOT_SPECIFIED = 'NOT_SPECIFIED'
+  OTHER = 'OTHER'
 }
 
 export interface IUser extends Document {

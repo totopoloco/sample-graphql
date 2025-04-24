@@ -1,4 +1,3 @@
-import { Schema } from 'mongoose';
 import createModel from './createModel';
 import { IUser, Gender } from '../types/models';
 
@@ -16,7 +15,7 @@ const userSchema = {
     type: String,
     required: true,
     enum: Object.values(Gender),
-    default: Gender.NOT_SPECIFIED
+    default: Gender.OTHER
   }
 };
 
