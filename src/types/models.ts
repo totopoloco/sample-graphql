@@ -1,9 +1,24 @@
+import e from 'express';
 import { Document } from 'mongoose';
 
 export enum Gender {
   FEMALE = 'FEMALE',
   MALE = 'MALE',
   OTHER = 'OTHER'
+}
+
+export enum SampleType {
+  PURPOSEIVE = 'PURPOSEIVE',
+  CONVENIENCE = 'CONVENIENCE',
+  SNOWBALL = 'SNOWBALL',
+  THEORICAL = 'THEORIACAL',
+}
+
+export interface ISample extends Document {
+  name: string;
+  description: string;
+  sampleType: SampleType;
+  owner: IUser
 }
 
 export interface IUser extends Document {

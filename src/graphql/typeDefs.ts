@@ -16,6 +16,13 @@ export const typeDefs = `#graphql
     OTHER
   }
 
+  enum SampleType {
+    PURPOSEIVE
+    CONVENIENCE
+    SNOWBALL
+    THEORICAL
+  }
+
   """
   User Subscription Payload.
   The server will send a message to the client
@@ -40,6 +47,19 @@ export const typeDefs = `#graphql
     gender: String!
   }
 
+  type Sample {
+    "The sample's unique identifier."
+    id: ID!
+    "The sample's name."
+    name: String!
+    "The sample's description."
+    description: String!
+    "The sample's type."
+    sampleType: SampleType!
+    "The sample's owner."
+    owner: User!
+  }
+
   """
   Query Type.
   All queries that can be made to the server.
@@ -49,6 +69,10 @@ export const typeDefs = `#graphql
     users: [User]
     "Get a user by their unique identifier."
     user(id: ID!): User
+    "Get all samples."
+    samples: [Sample]
+    "Get a sample by their unique identifier."
+    sample(id: ID!): Sample
   }
 
   """
@@ -62,6 +86,13 @@ export const typeDefs = `#graphql
     updateUser(id: ID!, name: String, email: String, gender: Gender): User
     "Delete an existing user."
     deleteUser(id: ID!): User
+
+    "Create a new sample."
+    createSample(name: String!, description: String!, sampleType: SampleType!, owner: ID!): Sample
+    "Update an existing sample."
+    updateSample(id: ID!, name: String, description: String, sampleType: SampleType, owner: ID): Sample
+    "Delete an existing sample."
+    deleteSample(id: ID!): Sample
   }
 
   """

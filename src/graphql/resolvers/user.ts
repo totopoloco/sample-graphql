@@ -1,33 +1,20 @@
 import { IResolvers } from '@graphql-tools/utils';
-import { IUser } from '../types/models';
-import User from '../models/User';
-import { pubsub, EVENTS } from './pubsub';
+import User from '../../models/User';
+import { IUser } from '../../types/models';
+import { pubsub, EVENTS } from '../pubsub';
+import { UserArgs, CreateUserArgs, UpdateUserArgs } from './types';
 
-interface UserArgs {
-  id: string;
-}
-
-interface CreateUserArgs {
-  name: string;
-  email: string;
-  gender?: string;
-}
-
-interface UpdateUserArgs extends Partial<CreateUserArgs> {
-  id: string;
-}
-
-const resolvers: IResolvers = {
+export const userResolvers: IResolvers = {
   Query: {
     users: async (): Promise<IUser[]> => await User.find(),
     user: async (_: any, { id }: UserArgs): Promise<IUser | null> => await User.findById(id),
   },
+  
   Mutation: {
     createUser: async (_: any, { name, email, gender }: CreateUserArgs): Promise<IUser> => {
       const user = new User({ name, email, gender });
       await user.save();
 
-      //Publish the event
       await pubsub.publish(EVENTS.USER_CHANGED, {
         userChanged: {
           mutation: 'CREATED',
@@ -35,7 +22,6 @@ const resolvers: IResolvers = {
         }
       });
 
-      //Return the user
       return user;
     },
 
@@ -47,7 +33,6 @@ const resolvers: IResolvers = {
       );
 
       if (user) {
-        //Publish the event
         await pubsub.publish(EVENTS.USER_CHANGED, {
           userChanged: {
             mutation: 'UPDATED',
@@ -58,11 +43,11 @@ const resolvers: IResolvers = {
 
       return user;
     },
+    
     deleteUser: async (_: any, { id }: UserArgs): Promise<IUser | null> => {
       const user = await User.findByIdAndDelete(id);
 
       if (user) {
-        //Publish the event
         await pubsub.publish(EVENTS.USER_CHANGED, {
           userChanged: {
             mutation: 'DELETED',
@@ -74,11 +59,10 @@ const resolvers: IResolvers = {
       return user;
     },
   },
+  
   Subscription: {
     userChanged: {
       subscribe: () => pubsub.asyncIterator([EVENTS.USER_CHANGED])
     }
   }
 };
-
-export default resolvers;
