@@ -17,7 +17,7 @@ services:
     container_name: demo-graphql-mongodb
     image: bitnami/mongodb:latest
     ports:
-      - '27017:27017'
+      - '37017:27017'
     environment:
       - MONGODB_ROOT_USER=root
       - MONGODB_ROOT_PASSWORD=example
