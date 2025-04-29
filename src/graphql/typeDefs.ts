@@ -23,6 +23,24 @@ export const typeDefs = `#graphql
     THEORICAL
   }
 
+  scalar JSON
+
+  enum SortOrder {
+    ASC
+    DESC
+  }
+
+  type History {
+    id: ID!
+    originalId: ID!
+    modelName: String!
+    oldValues: JSON
+    newValues: JSON
+    operation: String!
+    historyAt: String!
+    changedBy: String!
+  }
+
   """
   User Subscription Payload.
   The server will send a message to the client
@@ -73,6 +91,8 @@ export const typeDefs = `#graphql
     samples: [Sample]
     "Get a sample by their unique identifier."
     sample(id: ID!): Sample
+    "Get history records for a specific entity type (User, Sample, etc.)"
+    history(modelName: String!, sortOrder: SortOrder): [History] 
   }
 
   """

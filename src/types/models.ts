@@ -29,8 +29,9 @@ export interface IUser extends Document {
   updatedAt?: Date;
 }
 
-export interface IHistory {
+export interface IHistory extends Document {
   originalId: string;
+  modelName: string;
   oldValues: Record<string, any>;
   newValues: Record<string, any>;
   operation: 'UPDATE' | 'DELETE';

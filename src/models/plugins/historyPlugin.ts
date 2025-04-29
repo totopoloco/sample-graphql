@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model, Query } from 'mongoose';
+import History from '../History';
 
 interface HistoryPluginOptions {
   modelName?: string;
@@ -14,48 +15,17 @@ type QueryMiddlewareContext = {
 
 function historyPlugin(schema: Schema, options: HistoryPluginOptions = {}): void {
   const modelName = options.modelName || 'UnknownModel';
-  console.log(`Initializing history plugin for model: ${modelName}`);
-  const historyModelName = `${modelName}History`;
-
-  // Create a simplified history schema
-  const historySchema = new mongoose.Schema({
-    originalId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: modelName
-    },
-    oldValues: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {}
-    },
-    newValues: {
-      type: mongoose.Schema.Types.Mixed,
-      default: {}
-    },
-    operation: {
-      type: String,
-      enum: ['UPDATE', 'DELETE'],
-      required: true
-    },
-    historyAt: {
-      type: Date,
-      default: Date.now
-    },
-    changedBy: {
-      type: String,
-      default: 'system'
-    }
-  }, {
-    timestamps: false
-  });
-
-  // Create or get history model
-  let HistoryModel: mongoose.Model<any>;
-  try {
-    HistoryModel = mongoose.model(historyModelName);
-  } catch (error) {
-    HistoryModel = mongoose.model(historyModelName, historySchema);
+  
+  // Check if this model should be tracked based on TRACKABLES env var
+  const trackables = process.env.TRACKABLES?.split(',') || [];
+  const shouldTrack = trackables.includes(modelName);
+  
+  if (!shouldTrack) {
+    console.log(`History tracking disabled for model: ${modelName}`);
+    return; // Skip setting up the plugin if the model is not trackable
   }
+  
+  console.log(`Initializing history plugin for model: ${modelName}`);
 
   // Pre findOneAndUpdate middleware
   schema.pre('findOneAndUpdate', async function(this: QueryMiddlewareContext, next: Function) {
@@ -80,8 +50,9 @@ function historyPlugin(schema: Schema, options: HistoryPluginOptions = {}): void
       });
       
       if (Object.keys(oldValues).length > 0) {
-        const historyEntry = new HistoryModel({
+        const historyEntry = new History({
           originalId: this._originalDoc._id,
+          modelName, // Track which model this history belongs to
           operation: 'UPDATE',
           oldValues,
           newValues,
@@ -122,8 +93,9 @@ function historyPlugin(schema: Schema, options: HistoryPluginOptions = {}): void
           });
           
           if (Object.keys(oldValues).length > 0) {
-            const historyRecord = new HistoryModel({
+            const historyRecord = new History({
               originalId: this._originalDoc._id,
+              modelName,
               operation: 'UPDATE',
               oldValues,
               newValues,
@@ -149,8 +121,9 @@ function historyPlugin(schema: Schema, options: HistoryPluginOptions = {}): void
   // Post findOneAndDelete middleware
   schema.post('findOneAndDelete', async function(this: QueryMiddlewareContext, result: any) {
     if (this._docToDelete) {
-      const historyRecord = new HistoryModel({
+      const historyRecord = new History({
         originalId: this._docToDelete._id,
+        modelName,
         operation: 'DELETE',
         oldValues: this._docToDelete,
         newValues: {},
@@ -175,8 +148,9 @@ function historyPlugin(schema: Schema, options: HistoryPluginOptions = {}): void
 
   schema.post('deleteOne', async function(this: QueryMiddlewareContext, result: any) {
     if (this._docToDelete) {
-      const historyRecord = new HistoryModel({
+      const historyRecord = new History({
         originalId: this._docToDelete._id,
+        modelName,
         operation: 'DELETE',
         oldValues: this._docToDelete,
         newValues: {},
